@@ -56,22 +56,5 @@ const client = new Client({
     intents: Object.values(GatewayIntentBits) as GatewayIntentBits[],
 });
 
-// delete all temp files
-fs.readdir("./temp/", (err, files) => {
-    if (err) {
-        console.error("Error reading temp directory:", err);
-        return;
-    }
-
-    for (const file of files) {
-        const filePath = `./temp/${file}`;
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error(`Error deleting temp file ${filePath}:`, err);
-            }
-        });
-    }
-});
-
 export { FILE_TYPE, client, commands, actions };
 client.login(process.env.DISCORD_TOKEN);
