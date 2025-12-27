@@ -24,5 +24,6 @@ export function startMemberCountJob(client: Client): NodeJS.Timeout {
     } catch (error) {
       console.error(`Error updating member count: ${error}`);
     }
-  }, 60 * 1000);
+    /* 2時間ごとに繰り返す */
+  }, 2 * 60 * 60 * 1000);
 }
