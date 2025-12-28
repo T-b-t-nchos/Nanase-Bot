@@ -145,8 +145,7 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
 
   const { customId } = interaction;
   const command: ButtonCommand = JSON.parse(customId);
-  const { data } = command;
-  const actionName = data.action;
+  const actionName = command.action;
 
   const action: Action<ButtonInteraction> = actions.button[actionName];
   const flags = action.data.flags || 0;
@@ -189,8 +188,7 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
 
   const { customId } = interaction;
   const command: ModalCommand = JSON.parse(customId);
-  const { data } = command;
-  const actionName = data.action;
+  const actionName = command.action;
   const action: Action<ModalSubmitInteraction> = actions.modal[actionName];
   const flags: number = action.data.flags || 0;
 
