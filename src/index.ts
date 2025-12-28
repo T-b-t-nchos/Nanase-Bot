@@ -51,9 +51,7 @@ for (const folder of folders) {
 
   for (const file of actionFiles) {
     const path = `./handlers/${folder}/${file}`;
-    console.log(`    Path: ${path}`);
     const action = require(path).default as Action<any>;
-    console.log(action);
     console.log(`    Load: ${action.data.action}`);
 
     actions[folder][action.data.action] = action;
@@ -104,8 +102,7 @@ client.once("ready", async () => {
   return client.user?.setActivity("with Discord.js", { type: 0 });
 });
 
-client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
-  // コマンドの実行
+client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // コマンドの実行
   if (!interaction.isCommand()) return;
   const { commandName } = interaction;
   const command: Command = commands[commandName];
@@ -143,26 +140,26 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
   }
 });
 
-client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
-  // ボタンの実行
+client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // ボタンの実行
   if (!interaction.isButton()) return;
 
   const { customId } = interaction;
   const command: ButtonCommand = JSON.parse(customId);
   const actionName = command.action;
-
   const action: Action<ButtonInteraction> = actions.button[actionName];
+  if (!action) {
+    console.error(`Action ${actionName} not found`);
+    await interaction.followUp("This action does not exist!");
+    return;
+  }
+
   const flags = action.data.flags || 0;
 
   if (action.data.defer) {
     await interaction.deferReply({ flags });
   }
 
-  if (!action) {
-    console.error(`Action ${actionName} not found`);
-    await interaction.followUp("This action does not exist!");
-    return;
-  }
+
 
   console.log(`Executing action: ${actionName}`);
   console.log("");
@@ -185,23 +182,22 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
   }
 });
 
-client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
-  // ダイアログの実行
+client.on("interactionCreate", async (interaction: Interaction<CacheType>) => { // ダイアログの実行
   if (!interaction.isModalSubmit()) return;
 
   const { customId } = interaction;
   const command: ModalCommand = JSON.parse(customId);
   const actionName = command.action;
   const action: Action<ModalSubmitInteraction> = actions.modal[actionName];
-  const flags: number = action.data.flags || 0;
-
-  if (action.data.defer) {
-    await interaction.deferReply({ flags });
-  }
   if (!action) {
     console.error(`Action ${actionName} not found`);
     await interaction.followUp("This action does not exist!");
     return;
+  }
+
+  const flags: number = action.data.flags || 0;
+  if (action.data.defer) {
+    await interaction.deferReply({ flags });
   }
 
   console.log(`Executing action: ${actionName}`);
