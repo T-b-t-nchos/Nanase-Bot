@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { getMemberStatus } from "../utils/server-status/getMemberStatus";
+import { getMemberStatus } from "../utils/getMemberStatus";
 
 export function startMemberCountJob(client: Client): NodeJS.Timeout {
   const CHANNEL_ID = "1454473598973509697";
