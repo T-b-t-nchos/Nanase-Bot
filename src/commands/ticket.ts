@@ -86,7 +86,12 @@ export default {
             const button = createButton({
                 label: label,
                 customId: {
-                    category: category?.id
+                    data: {
+                        action: "ticket-open",
+                    },
+                    value: {
+                        category: category?.id,
+                    }
                 },
             });
             const embed = new EmbedBuilder()
