@@ -191,13 +191,12 @@ client.on("interactionCreate", async (interaction: Interaction<CacheType>) => {
   const command: ModalCommand = JSON.parse(customId);
   const { data } = command;
   const actionName = data.action;
-  const flags: number = data.flags || 0;
+  const action: Action<ModalSubmitInteraction> = actions.modal[actionName];
+  const flags: number = action.data.flags || 0;
 
-  if (data.defer !== false) {
+  if (action.data.defer !== false) {
     await interaction.deferReply({ flags });
   }
-
-  const action: Action<ModalSubmitInteraction> = actions.modal[actionName];
   if (!action) {
     console.error(`Action ${actionName} not found`);
     await interaction.followUp("This action does not exist!");
