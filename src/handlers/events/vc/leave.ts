@@ -1,5 +1,5 @@
 import { VoiceState, ChannelType } from "discord.js";
-import botConfig from "../../../bot.config";
+import botConfig from "../../../../bot.config";
 
 const handleVcLeave = (async (oldState: VoiceState, newState: VoiceState) => {
     if (!oldState.channel) return;
