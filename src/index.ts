@@ -14,6 +14,7 @@ import { handleVcLogger } from "./handlers/events/vc/logger";
 import { updateMemberCount } from "./jobs/updateMemberCount";
 import { loadCommands, loadActions } from "./utils/loader";
 import dotenv from "dotenv";
+import noticeNewRecruit from "./jobs/noticeNewRecruit";
 
 dotenv.config({ path: ".env" });
 
@@ -175,6 +176,12 @@ client.on("guildMemberAdd", async (member) => {
 // メンバー数更新
 client.on("guildMemberRemove", async (member) => {
   await updateMemberCount(client);
+});
+
+client.on("threadCreate", async (thread, newlyCreated) => {
+  if (thread.parentId === "1459199432519057587") {
+    noticeNewRecruit(client, thread);
+  }
 });
 
 export { FILE_TYPE, client, commands, actions };
